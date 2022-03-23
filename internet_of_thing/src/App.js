@@ -49,32 +49,34 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, 300));   
       const copy = { ...sensorState };
       const response = await getSensorData();
       if (response.success) {
         Object.keys(response.response).map(
           (key, index) => (copy[key].value = response.response[key])
         );
-        setSensorState({ ...copy });
       }
+      setSensorState({ ...copy });
     };
     fetchData();
   }, [sensorState]);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("fetchDeviceDataCalled")
+      await new Promise((r) => setTimeout(r, 300));    
       const copy = { ...deviceState };
       const response = await getDeviceData();
       if (response.success) {
         Object.keys(response.response).map(
           (key, index) => (copy[key].value = response.response[key])
         );
-        setDeviceState({ ...copy });
       }
+      setDeviceState({ ...copy });
     };
     fetchData();
-  }, []);
+  }, [deviceState]);
 
   return (
     <div className="App-header">
@@ -103,9 +105,9 @@ function App() {
                 selectedValue={deviceState[key].value}
                 buttonsValueTitleSet={ON_OF_SET}
                 setSelectedValue={(value) => {
-                  const copy = { ...deviceState };
-                  copy[key].value = value;
-                  setDeviceState({ ...copy });
+                  // const copy = { ...deviceState };
+                  // copy[key].value = value;
+                  // // setDeviceState({ ...copy });
                   updateDeviceState(key, value);
                 }}
               />

@@ -1,7 +1,7 @@
 import axios from "axios";
-
+console.log(window.location.origin);
 const api = axios.create({
-  baseURL: "http://127.0.0.1:5000/",
+  baseURL: window.location.origin,
 });
 
 export async function getSensorData() {
@@ -18,6 +18,7 @@ export async function getDeviceData() {
   try {
     const response = await api.get('/deviceData');
     // console.log("getDeviceData")
+    console.log(response.data)
     return { success: true, response: { ...response.data } };
   } catch (error) {
     console.error(error);
