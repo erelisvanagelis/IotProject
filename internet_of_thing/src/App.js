@@ -1,7 +1,5 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Box, Container, Divider, Stack } from "@mui/material";
-import { sizing } from "@mui/system";
 import SensorValueRow from "./components/SensorValueRow";
 import { useEffect, useState } from "react";
 import ButtonDeviceRow from "./components/ButtonDeviceRow";
@@ -10,28 +8,22 @@ import { getDeviceData, getSensorData, updateDeviceState } from "./API/IoT";
 
 function App() {
   const [sensorState, setSensorState] = useState({
-    motion1: {
-      description: "Motion (1)",
-      measure: MEASUREMENTS.distance,
-      value: 0,
-    },
-    motion2: {
-      description: "Motion (2)",
-      measure: MEASUREMENTS.distance,
-      value: 0,
-    },
-    temperature: {
+    temp1: {
       description: "Temperature",
       measure: MEASUREMENTS.temperature,
       value: 0,
     },
-    moisture: {
-      description: "Moisture",
-      measure: MEASUREMENTS.moisture,
+    humid1: {
+      description: "Humidity",
+      measure: "%",
+      value: 0,
+    },
+    flame1: {
+      description: "Flame",
+      measure: "",
       value: 0,
     },
   });
-
   const [deviceState, setDeviceState] = useState({
     light1: {
       description: "Light (1)",
@@ -46,10 +38,10 @@ function App() {
       value: "off",
     },
   });
-
   useEffect(() => {
     const fetchData = async () => {
-      await new Promise((r) => setTimeout(r, 300));   
+      console.log("fetchSensorDataCalled");
+      await new Promise((r) => setTimeout(r, 300));
       const copy = { ...sensorState };
       const response = await getSensorData();
       if (response.success) {
@@ -61,11 +53,10 @@ function App() {
     };
     fetchData();
   }, [sensorState]);
-
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetchDeviceDataCalled")
-      await new Promise((r) => setTimeout(r, 300));    
+      console.log("fetchDeviceDataCalled");
+      await new Promise((r) => setTimeout(r, 300));
       const copy = { ...deviceState };
       const response = await getDeviceData();
       if (response.success) {
@@ -77,7 +68,6 @@ function App() {
     };
     fetchData();
   }, [deviceState]);
-
   return (
     <div className="App-header">
       <Container
@@ -104,12 +94,7 @@ function App() {
                 description={deviceState[key].description}
                 selectedValue={deviceState[key].value}
                 buttonsValueTitleSet={ON_OF_SET}
-                setSelectedValue={(value) => {
-                  // const copy = { ...deviceState };
-                  // copy[key].value = value;
-                  // // setDeviceState({ ...copy });
-                  updateDeviceState(key, value);
-                }}
+                setSelectedValue={(value) => updateDeviceState(key, value)}
               />
             ))}
           </Stack>
